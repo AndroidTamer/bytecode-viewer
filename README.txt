@@ -1,8 +1,8 @@
-Bytecode Viewer is an Advanced Lightweight Java Bytecode Viewer, GUI Smali, GUI Baksmali, GUI APK Editor, GUI Dex Editor, GUI APK Decompiler, GUI DEX Decompiler, GUI Procyon Java Decompiler, GUI CFR Java Decompiler, GUI FernFlower Java Decompiler, GUI DEX2Jar, GUI Jar2DEX, GUI Jar-Jar, Hex Viewer, Code Searcher, Debugger and more.
+Bytecode Viewer is an Advanced Lightweight Java Bytecode Viewer, GUI Java Decompiler, GUI Bytecode Editor, GUI Smali, GUI Baksmali, GUI APK Editor, GUI Dex Editor, GUI APK Decompiler, GUI DEX Decompiler, GUI Procyon Java Decompiler, GUI Krakatau, GUI CFR Java Decompiler, GUI FernFlower Java Decompiler, GUI DEX2Jar, GUI Jar2DEX, GUI Jar-Jar, Hex Viewer, Code Searcher, Debugger and more.
 It's written completely in Java, and it's open sourced. It's currently being maintained and developed by Konloch.
 
 There is also a plugin system that will allow you to interact with the loaded classfiles, for example you can write a String deobfuscator, a malicious code searcher, or something else you can think of.
-You can either use one of the pre-written plugins, or write your own. It supports groovy, python and ruby scripting. Once a plugin is activated, it will execute the plugin with a ClassNode ArrayList of every single class loaded in BCV, this allows the user to handle it completely using ASM.
+You can either use one of the pre-written plugins, or write your own. It supports groovy scripting. Once a plugin is activated, it will execute the plugin with a ClassNode ArrayList of every single class loaded in BCV, this allows the user to handle it completely using ASM.
 
 Code from various projects has been used, including but not limited to:
     J-RET by WaterWolf
@@ -14,8 +14,9 @@ Code from various projects has been used, including but not limited to:
     Procyon by Mstrobel
     CFR by Lee Benfield
     CFIDE by Bibl
-	Smali by JesusFreke
-	Dex2Jar by pxb1..?
+    Smali by JesusFreke
+    Dex2Jar by pxb1..?
+    Krakatau by Storyyeller
 
 Contributors:
     Konloch
@@ -27,11 +28,13 @@ Contributors:
     Afffsdd
     If I missed you, please feel free to contact me @Konloch or konloch@gmail.com
 
-Contribution Guide Lines:
+Contribution Guide Lines/Coding Conventions:
     Packages must start with the.bytecode.club.bytecodeviewer
-    If code you write can throw an exception, handle it using new the.bytecode.club.bytecodeviewer.ExceptionUI(exception)
+    If code you write can throw an exception, handle it using new the.bytecode.club.bytecodeviewer.ExceptionUI(exception, "authors@email.com")
+	All variables must be at the start of each class.
+	Brackets are meant to be on the same line, I.E. public void main(String[] args) { not (String[] args) <NEWLINE_BREAK> {
 
-Video: http://the.bytecode.club/bytecodeviewer-video/
+Website: https://bytecodeviewer.com
 Source Code: https://github.com/konloch/bytecode-viewer
 Bin/Archive: https://github.com/konloch/bytecode-viewer/releases
 Java Docs: https://the.bytecode.club/docs/bytecode-viewer/
@@ -40,15 +43,16 @@ Report Bugs (or below): https://github.com/Konloch/bytecode-viewer/issues
 Discussion Forum: https://the.bytecode.club/forumdisplay.php?fid=69
 
 Key Features:
-    Smali/BakSmali Intergration - You can now edit class files/dex files via smali!
+    Krakatau Integration for Bytecode assembly/disassembly. 
+    Smali/BakSmali Integration - You can now edit class files/dex files via smali!
     APK/DEX Support - Using Dex2Jar and Jar2Dex it's able to load and save APKs with ease!
     Java Decompiler - It utilizes FernFlower, Procyon and CFR for decompilation.
     Bytecode Decompiler - A modified version of CFIDE's.
     Hex Viewer - Powered by JHexPane.
-    Each Decompiler/Viewer is toggleable, you can also select what will display on each pane.
+    Each Decompiler/Editor/Viewer is toggleable, you can also select what will display on each pane.
     Fully Featured Search System - Search through strings, functions, variables and more!
     A Plugin System With Built In Plugins - (Show All Strings, Malicious Code Scanner, String Decrypters, etc)
-    Fully Featured Scripting System That Supports Groovy, Python And Ruby.
+    Fully Featured Scripting System That Supports Groovy.
     EZ-Inject - Graphically insert hooks and debugging code, invoke main and start the program.
     Recent Files & Recent Plugins.
     And more! Give it a try for yourself!
@@ -256,7 +260,7 @@ Changelog:
 01/09/2015 - Added add entire directory.
 01/09/2015 - Fixed import .DEX files.
 01/10/2015 - Finished Smali Editing.
-01/10/2015 - Fixed a class opening issue with sychronization.
+01/10/2015 - Fixed a class opening issue with synchronization.
 01/11/2015 - Threaded all of the save functions.
 01/11/2015 - Removed all instances of the setCursor to busy.
 01/11/2015 - Added are you sure you wish to overwrite this existing file to all the other save functions.
@@ -264,3 +268,59 @@ Changelog:
 01/11/2015 - Updated CFR to CFR_0.94.jar
 01/11/2015 - Updated to the latest version of FernFlower.
 01/11/2015 - Fixed an extension appending issue with save Java file.
+--- 2.7.0 ---:
+01/11/2015 - Improved the Refresh Class function to be used as the default compile function.
+01/11/2015 - Implemented better error handling for decompiling class files.
+01/15/2015 - CTRL + O will open the add file interface.
+01/15/2015 - CTRL + N will open the net workspace interface.
+01/15/2015 - It will now save the last directory you opened.
+01/15/2015 - Some how the URL for the auto updater change log got changed, this has been fixed.
+01/15/2015 - Slightly updated the change log display, it'll now show all the changes since your version.
+01/16/2015 - Made EZ-Injection UI look a bit nicer.
+01/27/2015 - Decided to scrap the  JVM Sandbox POC and use the Security Manager.
+01/27/2015 - BCV now blocks exec and won't allow any ports to be bound.
+--- 2.7.1 ---:
+01/27/2015 - Fixed hide file.
+--- 2.8.0 ---:
+02/01/2015 - Updated CFR and Proycon to latest versions.
+02/01/2015 - Started working on implementing Krakatau.
+02/01/2015 - Sexifixed the security manager a little bit.
+02/03/2015 - Fully added Krakatau Java decompiler, just disassembly/assembly left.
+02/03/2015 - Updated the about window.
+02/03/2015 - Dropped JRuby and Jython support (BCV is now roughly 16mb, was 45mb).
+02/04/2015 - Added Krakatau Disassembly.
+02/04/2015 - Added Krakatau Assembly.
+--- 2.8.1 ---:
+02/04/2015 - Fixed UI bug with Krakatau/Krakatau Editable view panes.
+02/05/2015 - Added CTRL + F.
+--- 2.9.0 ---:
+02/11/2015 - Added ZStringArray String Decrypter. (Thanks Righteous)
+02/20/2015 - Moved the decompilers/disassemblers around.
+02/20/2015 - Fixed a resource leak with Krakatau Decompiler/Disassembler/Assembler.
+02/21/2015 - Fixed regex searching if your regex search contained a syntax error.
+02/21/2015 - Added the compiler/decompiler instances to the BytecodeViewer API class.
+02/21/2015 - Sped up the decompilers, each view pane runs its own decompiler thread.
+02/21/2015 - Added Janino compiler, you can now compile the decompiled source code inside of BCV.
+02/21/2015 - Added the editable option for almost all of the decompilers/disassemblers.
+02/21/2015 - Cached the next/previous icons and added a resources class for all resources.
+01/21/2015 - Renamed EZ-Injection as File-Run, however kept the plugin named EZ-Injection.
+02/21/2015 - Dropped Groovy support, added .Java plugin compilation instead (now only 10mb).
+02/21/2015 - Added support for reading resources, including displaying images, detecting pure ascii files and more.
+02/21/2015 - Fixed an issue with loading an already selected node in the file navigation pane.
+02/22/2015 - Added an error console to the Java compiler
+02/22/2015 - Ensured the spawned Python/Krakatau processes are killed when closing BCV.
+02/22/2015 - Made it more beginner friendly.
+02/22/2015 - Fixed? The file navigation search.
+02/22/2015 - Added a shit ton more comments to non-api related classes.
+02/23/2015 - Added APK resources.
+02/23/2015 - MORE ANDROID LOVE! Added APKTool.jar's decode. (Takes a while so it's a setting, also pumped the jar back to 16MB)
+02/23/2015 - Added close all but this tab menu.
+02/23/2015 - Not really code related, but added _install.bat and _uninstall.bat for the exe version of BCV.
+02/23/2015 - Back to ASM5, packed dex2jar in its own obfuscated jar.
+02/23/2015 - Added the annotations back to the Bytecode Decompiler. (Once again, thanks Bibl)
+02/23/2015 - It once again works with Java 8 Jars.
+--- 2.9.1 ---:
+02/24/2015 - Fixed the third pane window not showing the search buttons.
+02/24/2015 - Fixed some issues with the compiler functionality.
+--- 2.9.2 ---:
+02/24/2015 - Actually fixed the compiler, LOL.

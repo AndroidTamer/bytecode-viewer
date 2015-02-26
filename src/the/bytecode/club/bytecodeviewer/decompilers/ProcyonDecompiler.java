@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -38,15 +39,17 @@ import com.strobel.assembler.metadata.TypeReference;
 
 import the.bytecode.club.bytecodeviewer.BytecodeViewer;
 import the.bytecode.club.bytecodeviewer.JarUtils;
+import the.bytecode.club.bytecodeviewer.MiscUtils;
 
 /**
+ * Procyon Java Decompiler Wrapper
  * 
  * @author Konloch
  * @author DeathMarine
  * 
  */
 
-public class ProcyonDecompiler extends JavaDecompiler {
+public class ProcyonDecompiler extends Decompiler {
 
 	@Override
 	public void decompileToClass(String className, String classNameSaved) {
@@ -90,6 +93,7 @@ public class ProcyonDecompiler extends JavaDecompiler {
 
 	@Override
 	public String decompileClassNode(ClassNode cn) {
+		String exception = "";
 		try {
 			final ClassWriter cw = new ClassWriter(0);
 			cn.accept(cw);
@@ -97,7 +101,7 @@ public class ProcyonDecompiler extends JavaDecompiler {
 			String fileStart = BytecodeViewer.tempDirectory + BytecodeViewer.fs
 					+ "temp";
 
-			final File tempClass = new File(getUniqueName(fileStart, ".class") + ".class");
+			final File tempClass = new File(MiscUtils.getUniqueName(fileStart, ".class") + ".class");
 
 			try {
 				final FileOutputStream fos = new FileOutputStream(tempClass);
@@ -131,9 +135,13 @@ public class ProcyonDecompiler extends JavaDecompiler {
 
 			return decompiledSource;
 		} catch (Exception e) {
-			new the.bytecode.club.bytecodeviewer.api.ExceptionUI(e);
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			e.printStackTrace();
+
+			exception = "Bytecode Viewer Version: " + BytecodeViewer.version + BytecodeViewer.nl + BytecodeViewer.nl + sw.toString();
 		}
-		return "Procyon error! Send the stacktrace to Konloch at http://the.bytecode.club or konloch@gmail.com";
+		return "Procyon error! Send the stacktrace to Konloch at http://the.bytecode.club or konloch@gmail.com"+BytecodeViewer.nl+BytecodeViewer.nl+"Suggested Fix: Click refresh class, if it fails again try another decompiler."+BytecodeViewer.nl+BytecodeViewer.nl+exception;
 	}
 
 	@Override

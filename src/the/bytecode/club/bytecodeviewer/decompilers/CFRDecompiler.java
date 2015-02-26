@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Random;
@@ -21,14 +23,16 @@ import org.objectweb.asm.tree.ClassNode;
 
 import the.bytecode.club.bytecodeviewer.BytecodeViewer;
 import the.bytecode.club.bytecodeviewer.JarUtils;
+import the.bytecode.club.bytecodeviewer.MiscUtils;
 
 /**
+ * CFR Java Wrapper
  * 
  * @author Konloch
  * 
  */
 
-public class CFRDecompiler extends JavaDecompiler {
+public class CFRDecompiler extends Decompiler {
 
 	@Override
 	public void decompileToClass(String className, String classNameSaved) {
@@ -39,12 +43,19 @@ public class CFRDecompiler extends JavaDecompiler {
 	@Override
 	public String decompileClassNode(ClassNode cn) {
 		final ClassWriter cw = new ClassWriter(0);
-		cn.accept(cw);
-
-		String fileStart = BytecodeViewer.tempDirectory + BytecodeViewer.fs
-				+ "temp";
-
-		final File tempClass = new File(getUniqueName(fileStart, ".class") + ".class");
+		try {
+			cn.accept(cw);
+		} catch(Exception e) {
+			e.printStackTrace();
+			try {
+				Thread.sleep(200);
+				cn.accept(cw);
+			} catch (InterruptedException e1) { }
+		}
+			
+		String fileStart = BytecodeViewer.tempDirectory + BytecodeViewer.fs;
+		
+		final File tempClass = new File(MiscUtils.getUniqueName(fileStart, ".class") + ".class");
 
 		try {
 			final FileOutputStream fos = new FileOutputStream(tempClass);
@@ -89,13 +100,17 @@ public class CFRDecompiler extends JavaDecompiler {
 				try {
 					s = DiskReader.loadAsString(f.getAbsolutePath());
 				} catch (Exception e) {
-					new the.bytecode.club.bytecodeviewer.api.ExceptionUI(e);
-					return "CFR error! Send the stacktrace to Konloch at http://the.bytecode.club or konloch@gmail.com";
+					StringWriter sw = new StringWriter();
+					e.printStackTrace(new PrintWriter(sw));
+					e.printStackTrace();
+
+					String exception = "Bytecode Viewer Version: " + BytecodeViewer.version + BytecodeViewer.nl + BytecodeViewer.nl + sw.toString();
+					return "CFR error! Send the stacktrace to Konloch at http://the.bytecode.club or konloch@gmail.com"+BytecodeViewer.nl+BytecodeViewer.nl+"Suggested Fix: Click refresh class, if it fails again try another decompiler."+BytecodeViewer.nl+BytecodeViewer.nl+exception;
 				}
 				return s;
 			}
 		}
-		return "CFR error! Send the stacktrace to Konloch at http://the.bytecode.club or konloch@gmail.com";
+		return "CFR error!"+BytecodeViewer.nl+BytecodeViewer.nl+"Suggested Fix: Click refresh class, if it fails again try another decompiler.";
 	}
 
 	public String[] generateMainMethod(String filePath, String outputPath) {
@@ -224,8 +239,7 @@ public class CFRDecompiler extends JavaDecompiler {
 		JarUtils.saveAsJar(BytecodeViewer.getLoadedClasses(),
 				tempZip.getAbsolutePath());
 
-		String fileStart = BytecodeViewer.tempDirectory + BytecodeViewer.fs
-				+ "temp";
+		String fileStart = BytecodeViewer.tempDirectory + BytecodeViewer.fs;
 
 		String fuckery = fuckery(fileStart);
 
